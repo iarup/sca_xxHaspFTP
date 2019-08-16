@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<xs:schema targetNamespace="http://xmlns.oracle.com/datafile" attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+   <xs:element name="V2C">
+      <xs:complexType>
+         <xs:sequence>
+            <xs:element type="xs:int" name="PRINTER_SN"/>
+            <xs:element type="xs:byte" name="TYPE"/>
+            <xs:element type="xs:int" name="GROUP_NUMBER"/>
+            <xs:element type="xs:string" name="FILE_NAME"/>
+            <xs:element type="xs:string" name="DONGLE_SN"/>
+            <xs:element type="xs:string" name="SOURCE_TYPE"/>
+         </xs:sequence>
+      </xs:complexType>
+   </xs:element>
+</xs:schema>

@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<adapter-config name="FTP_GET" adapter="ftp" wsdlLocation="FTP_GET.wsdl" xmlns="http://platform.integration.oracle/blocks/adapter/fw/metadata">
+   <connection-factory location="eis/Ftp/FtpAdapter"/>
+   <endpoint-interaction portType="SynchGet_ptt" operation="SynchGet">
+      <interaction-spec className="oracle.tip.adapter.ftp.outbound.FTPReadInteractionSpec">
+         <property name="DeleteFile" value="false"/>
+         <property name="FileName" value="1"/>
+         <property name="LogicalDirectory" value="FTP_LOGS"/>
+         <property name="FileType" value="ascii"/>
+      </interaction-spec>
+   </endpoint-interaction>
+</adapter-config>

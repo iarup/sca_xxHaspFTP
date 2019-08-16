@@ -1,0 +1,97 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<composite name="xxHaspFTP" revision="1.0" mode="active" state="on" xmlns="http://xmlns.oracle.com/sca/1.0" xmlns:ui="http://xmlns.oracle.com/soa/designer/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+   <import location="Db_get_file_info.wsdl" namespace="http://xmlns.oracle.com/pcbpel/adapter/db/Db_get_file_info/"/>
+   <import location="FTP.wsdl" namespace="http://xmlns.oracle.com/pcbpel/adapter/ftp/FTP/"/>
+   <import location="xxHaspFtpRef.wsdl" namespace="http://tempuri.org/"/>
+   <import location="FTP_ASCII.wsdl" namespace="http://xmlns.oracle.com/pcbpel/adapter/ftp/FTP_ASCII/"/>
+   <import location="readFileHasp.wsdl" namespace="http://xmlns.oracle.com/pcbpel/adapter/file/readFileHasp/"/>
+   <import namespace="http://xmlns.oracle.com/pcbpel/adapter/ftp/xxHaspFTP/xxHaspFTP/FTP_GET" location="FTP_GET.wsdl" importType="wsdl"/>
+   <service ui:wsdlLocation="xxHaspFtpRef.wsdl" name="Client">
+      <interface.wsdl interface="http://tempuri.org/#wsdl.interface(xxHaspFTPSoap)" callbackInterface="http://tempuri.org/#wsdl.interface(xxHaspFTPSoap)" xmlns:ns="http://xmlns.oracle.com/sca/1.0"/>
+      <binding.ws port="http://tempuri.org/#wsdl.endpoint(xxHaspFTPSoap/xxHaspFTPSoap)" xmlns:ns="http://xmlns.oracle.com/sca/1.0"/>
+   </service>
+   <property name="originalProductVersion" type="xs:string" many="false">11.0.0.0.0</property>
+   <property name="productVersion" type="xs:string" many="false">12.2.1.0.0.151013</property>
+   <property name="compositeID" type="xs:string" many="false">a9532755-7ad6-428e-b264-59435a04e2fe</property>
+   <component name="xxHaspFTP">
+      <implementation.bpel src="xxHaspFTP.bpel"/>
+      <componentType xmlns="http://xmlns.oracle.com/sca/1.0" xmlns:ui="http://xmlns.oracle.com/soa/designer/">
+         <service ui:wsdlLocation="xxHaspFtpRef.wsdl" name="Client">
+            <interface.wsdl interface="http://tempuri.org/#wsdl.interface(xxHaspFTPSoap)" callbackInterface="http://tempuri.org/#wsdl.interface(xxHaspFTPSoap)"/>
+         </service>
+         <reference ui:wsdlLocation="Db_get_file_info.wsdl" name="DBgetFileInfo">
+            <interface.wsdl interface="http://xmlns.oracle.com/pcbpel/adapter/db/Db_get_file_info/#wsdl.interface(Db_get_file_info_ptt)"/>
+         </reference>
+         <reference ui:wsdlLocation="FTP.wsdl" name="FTP">
+            <interface.wsdl interface="http://xmlns.oracle.com/pcbpel/adapter/ftp/FTP/#wsdl.interface(Put_ptt)"/>
+         </reference>
+         <reference ui:wsdlLocation="FTP_ASCII.wsdl" name="FTP_ASCII">
+            <interface.wsdl interface="http://xmlns.oracle.com/pcbpel/adapter/ftp/FTP_ASCII/#wsdl.interface(Put_ptt)"/>
+         </reference>
+         <reference ui:wsdlLocation="readFileHasp.wsdl" name="readFileHasp">
+            <interface.wsdl interface="http://xmlns.oracle.com/pcbpel/adapter/file/readFileHasp/#wsdl.interface(readFile_ptt)"/>
+         </reference>
+         <reference name="FTP_GET" ui:wsdlLocation="FTP_GET.wsdl">
+            <interface.wsdl interface="http://xmlns.oracle.com/pcbpel/adapter/ftp/xxHaspFTP/xxHaspFTP/FTP_GET#wsdl.interface(SynchGet_ptt)"/>
+         </reference>
+      </componentType>
+   </component>
+   <reference ui:wsdlLocation="readFileHasp.wsdl" name="readFileHasp">
+      <interface.wsdl interface="http://xmlns.oracle.com/pcbpel/adapter/file/readFileHasp/#wsdl.interface(readFile_ptt)" xmlns:ns="http://xmlns.oracle.com/sca/1.0"/>
+      <binding.jca config="readFileHasp_file.jca">
+         <property name="jca.retry.interval">60</property>
+      </binding.jca>
+   </reference>
+   <reference ui:wsdlLocation="FTP_ASCII.wsdl" name="FTP_ASCII">
+      <interface.wsdl interface="http://xmlns.oracle.com/pcbpel/adapter/ftp/FTP_ASCII/#wsdl.interface(Put_ptt)" xmlns:ns="http://xmlns.oracle.com/sca/1.0"/>
+      <binding.jca config="FTP_ASCII_ftp.jca">
+         <property name="jca.retry.interval" type="xs:string" many="false">60</property>
+      </binding.jca>
+      <property name="FTP_DIR" type="xs:string" many="false" override="may">/sa-v2c/incoming</property>
+   </reference>
+   <reference ui:wsdlLocation="Db_get_file_info.wsdl" name="DBgetFileInfo">
+      <interface.wsdl interface="http://xmlns.oracle.com/pcbpel/adapter/db/Db_get_file_info/#wsdl.interface(Db_get_file_info_ptt)" xmlns:ns="http://xmlns.oracle.com/sca/1.0"/>
+      <binding.jca config="Db_get_file_info_db.jca">
+         <property name="jca.retry.interval" type="xs:string" many="false">60</property>
+      </binding.jca>
+      <property name="jca.retry.count" type="xs:int" many="false" override="may">4</property>
+      <property name="jca.retry.interval" type="xs:string" many="false">60</property>
+      <property name="jca.retry.backoff" type="xs:int" many="false" override="may">1</property>
+   </reference>
+   <reference ui:wsdlLocation="FTP.wsdl" name="FTP">
+      <interface.wsdl interface="http://xmlns.oracle.com/pcbpel/adapter/ftp/FTP/#wsdl.interface(Put_ptt)" xmlns:ns="http://xmlns.oracle.com/sca/1.0"/>
+      <binding.jca config="FTP_ftp.jca">
+         <property name="jca.retry.interval" type="xs:string" many="false">60</property>
+      </binding.jca>
+      <property name="FTP_DIR" type="xs:string" many="false" override="may">/sa-v2c/incoming</property>
+   </reference>
+   <reference name="FTP_GET" ui:wsdlLocation="FTP_GET.wsdl">
+      <interface.wsdl interface="http://xmlns.oracle.com/pcbpel/adapter/ftp/xxHaspFTP/xxHaspFTP/FTP_GET#wsdl.interface(SynchGet_ptt)"/>
+      <binding.jca config="FTP_GET_ftp.jca"/>
+      <property name="FTP_LOGS" type="xs:string" many="false" override="may">/sa-v2c/logs</property>
+   </reference>
+   <wire>
+      <source.uri>Client</source.uri>
+      <target.uri>xxHaspFTP/Client</target.uri>
+   </wire>
+   <wire>
+      <source.uri>xxHaspFTP/FTP</source.uri>
+      <target.uri>FTP</target.uri>
+   </wire>
+   <wire>
+      <source.uri>xxHaspFTP/FTP_ASCII</source.uri>
+      <target.uri>FTP_ASCII</target.uri>
+   </wire>
+   <wire>
+      <source.uri>xxHaspFTP/DBgetFileInfo</source.uri>
+      <target.uri>DBgetFileInfo</target.uri>
+   </wire>
+   <wire>
+      <source.uri>xxHaspFTP/readFileHasp</source.uri>
+      <target.uri>readFileHasp</target.uri>
+   </wire>
+   <wire>
+      <source.uri>xxHaspFTP/FTP_GET</source.uri>
+      <target.uri>FTP_GET</target.uri>
+   </wire>
+</composite>

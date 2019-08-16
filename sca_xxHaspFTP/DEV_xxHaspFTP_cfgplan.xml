@@ -1,0 +1,68 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<SOAConfigPlan xmlns:jca="http://platform.integration.oracle/blocks/adapter/fw/metadata" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:orawsp="http://schemas.oracle.com/ws/2006/01/policy" xmlns:edl="http://schemas.oracle.com/events/edl" xmlns="http://schemas.oracle.com/soa/configplan">
+   <composite name="xxHaspFTP">
+      <import>
+         <searchReplace>
+            <search/>
+            <replace/>
+         </searchReplace>
+      </import>
+      <service name="Client">
+         <binding type="ws">
+            <attribute name="port">
+               <replace>http://tempuri.org/#wsdl.endpoint(xxHaspFTPSoap/xxHaspFTPSoap)</replace>
+            </attribute>
+         </binding>
+      </service>
+      <reference name="readFileHasp">
+         <binding type="jca">
+            <property name="jca.retry.interval">
+               <replace>60</replace>
+            </property>
+         </binding>
+      </reference>
+      <reference name="FTP_GET">
+         <property name="FTP_LOGS">
+            <replace>/Test/Logs</replace>
+         </property>
+         <binding type="jca">
+            <property name="jca.retry.interval">
+               <replace>60</replace>
+            </property>
+         </binding>
+      </reference>
+      <reference name="FTP_ASCII">
+         <property name="FTP_DIR">
+            <replace>/Test</replace>
+         </property>
+         <binding type="jca">
+            <property name="jca.retry.interval">
+               <replace>60</replace>
+            </property>
+         </binding>
+      </reference>
+      <reference name="DBgetFileInfo">
+         <binding type="jca">
+            <property name="jca.retry.interval">
+               <replace>60</replace>
+            </property>
+         </binding>
+      </reference>
+      <reference name="FTP">
+         <property name="FTP_DIR">
+            <replace>/Test</replace>
+         </property>
+         <binding type="jca">
+            <property name="jca.retry.interval">
+               <replace>60</replace>
+            </property>
+         </binding>
+      </reference>
+   </composite>
+   <wsdlAndSchema name="Db_get_file_info.wsdl|Db_get_file_info_db.jca|fileAdapterOutboundHeader.wsdl|FTP.wsdl|ftpAdapterOutboundHeader.wsdl|FTP_ASCII.wsdl|FTP_ASCII_ftp.jca|FTP_ftp.jca|FTP_GET.wsdl|FTP_GET_ftp.jca|readFileHasp.wsdl|readFileHasp_file.jca|readHaspFile.wsdl|xsd/datafile.xsd|xsd/Db_get_file_info.xsd|xsd/log.xsd|xxHaspFtp.wsdl|xxHaspFtpRef.wsdl">
+      <searchReplace>
+         <search/>
+         <replace/>
+      </searchReplace>
+   </wsdlAndSchema>
+</SOAConfigPlan>

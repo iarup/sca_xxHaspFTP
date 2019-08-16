@@ -1,0 +1,62 @@
+Modified Composite [ xxHaspFTP ]
+	Service
+	  Service  [ Client ]
+	    Service Bindings
+	  	Binding  [ ws ]
+	Attribute name=port
+		No change in old and new value http://tempuri.org/#wsdl.endpoint(xxHaspFTPSoap/xxHaspFTPSoap) 
+	  Service  [ Client ]
+	    Service Bindings
+	Reference
+	  Reference  [ DBgetFileInfo ]
+	    Reference Bindings
+	  Reference  [ FTP ]
+	    Reference Bindings
+	  Reference  [ FTP_ASCII ]
+	    Reference Bindings
+	  Reference  [ readFileHasp ]
+	    Reference Bindings
+	  Reference  [ FTP_GET ]
+	    Reference Bindings
+	  Reference  [ readFileHasp ]
+	    Reference Bindings
+	  	Binding  [ jca ]
+	    Property [ jca.retry.interval ]
+		No change in old and new value 60 
+	  Reference  [ FTP_ASCII ]
+	    Property [ FTP_DIR ]
+		Old [ /Test ] 
+		New [ / ] 
+	    Reference Bindings
+	  	Binding  [ jca ]
+	    Property [ jca.retry.interval ]
+		No change in old and new value 60 
+	  Reference  [ DBgetFileInfo ]
+	    Property [ jca.retry.interval ]
+		No change in old and new value 60 
+	    Property [ jca.retry.count ]
+		No change in old and new value 4 
+	    Property [ jca.retry.interval ]
+		No change in old and new value 60 
+	    Property [ jca.retry.backoff ]
+		No change in old and new value 1 
+	    Reference Bindings
+	  	Binding  [ jca ]
+	    Property [ jca.retry.interval ]
+		No change in old and new value 60 
+	  Reference  [ FTP ]
+	    Property [ FTP_DIR ]
+		Old [ /Test ] 
+		New [ / ] 
+	    Reference Bindings
+	  	Binding  [ jca ]
+	    Property [ jca.retry.interval ]
+		No change in old and new value 60 
+	  Reference  [ FTP_GET ]
+	    Property [ FTP_LOGS ]
+		Old [ /Test/Logs ] 
+		New [ /Logs ] 
+	    Reference Bindings
+	  	Binding  [ jca ]
+---End Match for composite [ xxHaspFTP ] in config plan---
+Checking for replacement in wsdl and schema files

@@ -1,0 +1,79 @@
+Modified Composite [ xxHaspFTP ]
+	Import Loations
+		No change in old and new value Db_get_file_info.wsdl 
+		No change in old and new value FTP.wsdl 
+		No change in old and new value xxHaspFtpRef.wsdl 
+		No change in old and new value FTP_ASCII.wsdl 
+		No change in old and new value readFileHasp.wsdl 
+		No change in old and new value FTP_GET.wsdl 
+  Composite properties
+	Property [ originalProductVersion ]
+		No change in old and new value 11.0.0.0.0 
+	Property [ productVersion ]
+		No change in old and new value 12.2.1.0.0.151013 
+	Property [ compositeID ]
+		No change in old and new value a9532755-7ad6-428e-b264-59435a04e2fe 
+	Service
+	  Service  [ Client ]
+	    Service Bindings
+	  	Binding  [ ws ]
+	Attribute name=port
+		No change in old and new value http://tempuri.org/#wsdl.endpoint(xxHaspFTPSoap/xxHaspFTPSoap) 
+	  Service  [ Client ]
+	    Service Bindings
+	Reference
+	  Reference  [ DBgetFileInfo ]
+	    Reference Bindings
+	  Reference  [ FTP ]
+	    Reference Bindings
+	  Reference  [ FTP_ASCII ]
+	    Reference Bindings
+	  Reference  [ readFileHasp ]
+	    Reference Bindings
+	  Reference  [ FTP_GET ]
+	    Reference Bindings
+	  Reference  [ readFileHasp ]
+	    Reference Bindings
+	  	Binding  [ jca ]
+	    Property [ jca.retry.interval ]
+		No change in old and new value 60 
+	  Reference  [ FTP_ASCII ]
+	    Property [ FTP_DIR ]
+		Old [ /Test ] 
+		New [ / ] 
+	    Reference Bindings
+	  	Binding  [ jca ]
+	    Property [ jca.retry.interval ]
+		No change in old and new value 60 
+	  Reference  [ DBgetFileInfo ]
+	    Property [ jca.retry.interval ]
+		No change in old and new value 60 
+	    Property [ jca.retry.count ]
+		No change in old and new value 4 
+	    Property [ jca.retry.interval ]
+		No change in old and new value 60 
+	    Property [ jca.retry.backoff ]
+		No change in old and new value 1 
+	    Reference Bindings
+	  	Binding  [ jca ]
+	    Property [ jca.retry.interval ]
+		No change in old and new value 60 
+	  Reference  [ FTP ]
+	    Property [ FTP_DIR ]
+		Old [ /Test ] 
+		New [ / ] 
+	    Reference Bindings
+	  	Binding  [ jca ]
+	    Property [ jca.retry.interval ]
+		No change in old and new value 60 
+	  Reference  [ FTP_GET ]
+	    Property [ FTP_LOGS ]
+		Old [ /Test/Logs ] 
+		New [ /Logs ] 
+	    Reference Bindings
+	  	Binding  [ jca ]
+---End Match for composite [ xxHaspFTP ] in config plan---
+Checking for replacement in wsdl and schema files
+Replace Location in file Db_get_file_info_db.jca
+	connection-factory Old Value [ eis/DB/oa ] 
+		New Value [ eis/DB/PROD ] 

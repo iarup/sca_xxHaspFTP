@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<wsdl:definitions name="Db_get_file_info" targetNamespace="http://xmlns.oracle.com/pcbpel/adapter/db/Db_get_file_info/" xmlns:db="http://xmlns.oracle.com/pcbpel/adapter/db/Db_get_file_info" xmlns:tns="http://xmlns.oracle.com/pcbpel/adapter/db/Db_get_file_info/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:plt="http://schemas.xmlsoap.org/ws/2003/05/partner-link/">
+   <plt:partnerLinkType name="Db_get_file_info_plt">
+      <plt:role name="Db_get_file_info_role">
+         <plt:portType name="tns:Db_get_file_info_ptt"/>
+      </plt:role>
+   </plt:partnerLinkType>
+   <wsdl:types>
+      <schema xmlns="http://www.w3.org/2001/XMLSchema">
+         <import namespace="http://xmlns.oracle.com/pcbpel/adapter/db/Db_get_file_info" schemaLocation="xsd/Db_get_file_info.xsd"/>
+      </schema>
+   </wsdl:types>
+   <wsdl:message name="Db_get_file_infoInput_msg">
+      <wsdl:part name="Db_get_file_infoInput_msg" element="db:Db_get_file_infoInput"/>
+   </wsdl:message>
+   <wsdl:message name="Db_get_file_infoOutputCollection_msg">
+      <wsdl:part name="Db_get_file_infoOutputCollection" element="db:Db_get_file_infoOutputCollection"/>
+   </wsdl:message>
+   <wsdl:portType name="Db_get_file_info_ptt">
+      <wsdl:operation name="Db_get_file_info">
+         <wsdl:input message="tns:Db_get_file_infoInput_msg"/>
+         <wsdl:output message="tns:Db_get_file_infoOutputCollection_msg"/>
+      </wsdl:operation>
+   </wsdl:portType>
+</wsdl:definitions>

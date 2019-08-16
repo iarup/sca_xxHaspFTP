@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<definitions name="readFileHasp" targetNamespace="http://xmlns.oracle.com/pcbpel/adapter/file/readFileHasp/" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:hdr="http://xmlns.oracle.com/pcbpel/adapter/file/" xmlns:tns="http://xmlns.oracle.com/pcbpel/adapter/file/readFileHasp/" xmlns:opaque="http://xmlns.oracle.com/pcbpel/adapter/opaque/" xmlns:plt="http://schemas.xmlsoap.org/ws/2003/05/partner-link/">
+   <plt:partnerLinkType name="readFile_plt">
+      <plt:role name="readFile_role">
+         <plt:portType name="tns:readFile_ptt"/>
+      </plt:role>
+   </plt:partnerLinkType>
+   <types>
+      <schema targetNamespace="http://xmlns.oracle.com/pcbpel/adapter/opaque/" xmlns="http://www.w3.org/2001/XMLSchema">
+         <element name="opaqueElement" type="base64Binary"/>
+         <element name="empty">
+            <complexType/>
+         </element>
+      </schema>
+   </types>
+   <message name="Empty_msg">
+      <part name="Empty" element="opaque:empty"/>
+   </message>
+   <message name="readFile_msg">
+      <part name="opaque" element="opaque:opaqueElement"/>
+   </message>
+   <portType name="readFile_ptt">
+      <operation name="readFile">
+         <input message="tns:Empty_msg"/>
+         <output message="tns:readFile_msg"/>
+      </operation>
+   </portType>
+</definitions>

@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<xs:schema targetNamespace="http://xmlns.oracle.com/pcbpel/adapter/db/Db_get_file_info" xmlns="http://xmlns.oracle.com/pcbpel/adapter/db/Db_get_file_info" elementFormDefault="qualified" attributeFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+   <xs:element name="Db_get_file_infoInput" type="Db_get_file_infoInput"/>
+   <xs:complexType name="Db_get_file_infoInput">
+      <xs:sequence>
+         <xs:element name="HASP_INTERFACE_ID" type="xs:decimal" nillable="true"/>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:element name="Db_get_file_infoOutputCollection" type="Db_get_file_infoOutputCollection"/>
+   <xs:complexType name="Db_get_file_infoOutputCollection">
+      <xs:sequence>
+         <xs:element name="Db_get_file_infoOutput" type="Db_get_file_infoOutput" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name="Db_get_file_infoOutput">
+      <xs:sequence>
+         <xs:element name="v2c_file_name" type="xs:string" nillable="true"/>
+         <xs:element name="v2c_directory" type="xs:string" nillable="true"/>
+         <xs:element name="printer_sn" type="xs:string" nillable="true"/>
+         <xs:element name="group_number" type="xs:string" nillable="true"/>
+         <xs:element name="key_pn" type="xs:string" nillable="true"/>
+         <xs:element name="is_basis_hasp" type="xs:string" nillable="true"/>
+         <xs:element name="hasp_sn" type="xs:string" nillable="true"/>
+         <xs:element name="source_type" type="xs:string" nillable="true"/>
+      </xs:sequence>
+   </xs:complexType>
+</xs:schema>

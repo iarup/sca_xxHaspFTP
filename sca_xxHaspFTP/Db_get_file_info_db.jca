@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<adapter-config name="Db_get_file_info" adapter="db" wsdlLocation="Db_get_file_info.wsdl" xmlns="http://platform.integration.oracle/blocks/adapter/fw/metadata">
+   <connection-factory location="eis/DB/oa" UIConnectionName="DEV" adapterRef=""/>
+   <endpoint-interaction portType="Db_get_file_info_ptt" operation="Db_get_file_info">
+      <interaction-spec className="oracle.tip.adapter.db.DBPureSQLInteractionSpec">
+         <property name="SqlString" value="select v2c_file_name,v2c_directory,printer_sn,group_number,key_pn,is_basis_hasp ,hasp_sn ,source_type from XXCS_HASP_HEADERS  where  hasp_interface_id=? "/>
+         <property name="GetActiveUnitOfWork" value="false"/>
+      </interaction-spec>
+      <input/>
+      <output/>
+   </endpoint-interaction>
+</adapter-config>
