@@ -1,0 +1,326 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<!--
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  Oracle JDeveloper BPEL Designer 
+  
+  Created: Sun Jun 24 09:43:26 GMT 2012
+  Author:  Yuval.Tal
+  Purpose: Empty BPEL Process
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+--><process name="xxHaspFTP" targetNamespace="http://xmlns.oracle.com/xxHaspFTP" xmlns="http://schemas.xmlsoap.org/ws/2003/03/business-process/" xmlns:xp20="http://www.oracle.com/XSL/Transform/java/oracle.tip.pc.services.functions.Xpath20" xmlns:ns4="http://xmlns.oracle.com/bpel/services/IdentityService/xpath" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns16="http://xmlns.oracle.com/pcbpel/adapter/ftp/FTP_ASCII/" xmlns:ns5="http://www.oracle.com/XSL/Transform/java/oracle.tip.esb.server.headers.ESBHeaderFunctions" xmlns:ora="http://schemas.oracle.com/xpath/extension" xmlns:ns9="http://xmlns.oracle.com/pcbpel/adapter/db/Db_get_file_info" xmlns:ns17="http://xmlns.oracle.com/datafile" xmlns:ns1="http://tempuri.org/" xmlns:ns2="http://xmlns.oracle.com/pcbpel/adapter/db/DB_get_ftp_info/" xmlns:orcl="http://www.oracle.com/XSL/Transform/java/oracle.tip.pc.services.functions.ExtFunc" xmlns:ns15="http://xmlns.oracle.com/pcbpel/adapter/ftp/" xmlns:ns10="http://xmlns.oracle.com/pcbpel/adapter/file/ReadHASPfile/" xmlns:bpws="http://schemas.xmlsoap.org/ws/2003/03/business-process/" xmlns:ns13="http://xmlns.oracle.com/pcbpel/adapter/ftp/FTP/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns7="http://xmlns.oracle.com/pcbpel/adapter/db/Db_get_file_info/" xmlns:ldap="http://schemas.oracle.com/xpath/extension/ldap" xmlns:ns12="http://xmlns.oracle.com/pcbpel/adapter/file/readFileHasp/" xmlns:ns18="http://xmlns.oracle.com/pcbpel/adapter/ftp/xxHaspFTP/xxHaspFTP/FTP_GET" xmlns:client="http://xmlns.oracle.com/xxHaspFTP" xmlns:ns6="http://www.oracle.com/XSL/Transform/java/oracle.tip.xref.xpath.XRefXPathFunctions" xmlns:ns11="http://xmlns.oracle.com/pcbpel/adapter/file/" xmlns:ns19="http://xmlns.oracle.com/log" xmlns:ns3="http://xmlns.oracle.com/bpel/workflow/xpath" xmlns:ns14="http://xmlns.oracle.com/pcbpel/adapter/opaque/" xmlns:bpelx="http://schemas.oracle.com/bpel/extension" xmlns:ns8="http://xmlns.oracle.com/pcbpel/adapter/db/APPS/XXCS_HASP_PKG/GET_FTP_SERVER_INFO/" xmlns:dvm="http://www.oracle.com/XSL/Transform/java/oracle.tip.dvm.LookupValue" xmlns:bpel2="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:ns20="http://xmlns.oracle.com/pcbpel/adapter/ftp/xxHaspFTP/xxHaspFTP/FTP_GET" xmlns:bpm="http://xmlns.oracle.com/bpmn20/extensions" xmlns:xdk="http://schemas.oracle.com/bpel/extension/xpath/function/xdk" xmlns:oraext="http://www.oracle.com/XSL/Transform/java/oracle.tip.pc.services.functions.ExtFunc" xmlns:ns21="http://xmlns.oracle.com/pcbpel/adapter/ftp/xxHaspFTP/xxHaspFTP/xx" xmlns:ess="http://xmlns.oracle.com/scheduler" id="BpPrc0">
+  <!-- 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      PARTNERLINKS                                                      
+      List of services participating in this BPEL process               
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  -->
+  <bpelx:annotation>
+    <bpelx:analysis>
+      <bpelx:property name="wsdlFile">
+        xxHaspFtpRef.wsdl
+      </bpelx:property>
+    </bpelx:analysis>
+  </bpelx:annotation>
+  <partnerLinks>
+    <partnerLink name="Client" partnerRole="xxHaspFTPSoap_Role" partnerLinkType="ns1:xxHaspFTPSoap_PL" myRole="xxHaspFTPSoap_Role"/>
+    <partnerLink name="DBgetFileInfo" partnerRole="Db_get_file_info_role" partnerLinkType="ns7:Db_get_file_info_plt"/>
+    <partnerLink name="readFileHasp" partnerRole="readFile_role" partnerLinkType="ns12:readFile_plt"/>
+    <partnerLink name="FTP" partnerRole="Put_role" partnerLinkType="ns13:Put_plt"/>
+    <partnerLink name="FTP_ASCII" partnerRole="Put_role" partnerLinkType="ns16:Put_plt"/>
+    <partnerLink name="FTP_GET" partnerLinkType="ns20:SynchGet_plt" partnerRole="SynchGet_role"/>
+  </partnerLinks>
+  <variables>
+    <variable name="OnMessage_DownLoadFiles_InputVariable" messageType="ns1:DownLoadFilesSoapIn"/>
+    <variable name="OnMessage_UploadFiles_InputVariable" messageType="ns1:UploadFilesSoapIn"/>
+    <variable name="Reply_DownLoadFiles_OutputVariable" messageType="ns1:DownLoadFilesSoapOut"/>
+    <variable name="Reply_upLoadFiles_UploadFiles_OutputVariable" messageType="ns1:UploadFilesSoapOut"/>
+    <variable name="jndiDBVar" type="xsd:string"/>
+    <variable name="jndiFTPVar" type="xsd:string"/>
+    <variable name="fileName" type="xsd:string"/>
+    <variable name="fileDirectory" type="xsd:string"/>
+    <variable name="Title" type="xsd:string"/>
+  </variables>
+  <!-- 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      VARIABLES                                                        
+      List of messages and XML documents used within this BPEL process 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  -->
+  <!-- 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+     ORCHESTRATION LOGIC                                               
+     Set of activities coordinating the flow of messages across the    
+     services integrated within this business process                  
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  -->
+  <sequence name="main" id="BpSeq0">
+    <pick name="Start" createInstance="yes" id="BpPck0">
+      <onMessage portType="ns1:xxHaspFTPSoap" operation="UploadFiles" partnerLink="Client" variable="OnMessage_UploadFiles_InputVariable" id="BpOMs0">
+        <sequence name="Sequence_1" id="BpSeq1">
+          <scope name="upload_files" id="BpScp0">
+            <variables>
+              <variable name="DB_get_hasp_Info_Db_get_file_info_InputVariable" messageType="ns7:Db_get_file_infoInput_msg"/>
+              <variable name="DB_get_hasp_Info_Db_get_file_info_OutputVariable" messageType="ns7:Db_get_file_infoOutputCollection_msg"/>
+              <variable name="Invoke_readFile_readFile_InputVariable" messageType="ns12:Empty_msg"/>
+              <variable name="Invoke_readFile_readFile_OutputVariable" messageType="ns12:readFile_msg"/>
+            </variables>
+            <faultHandlers id="BpFhs0">
+              <catchAll id="BpCAl0">
+                <assign name="Assign_Err" id="BpAss0">
+                  <copy>
+                    <from expression="1"/>
+                    <to variable="Reply_upLoadFiles_UploadFiles_OutputVariable" part="parameters" query="/ns1:UploadFilesResponse/ns1:errCode"/>
+                  </copy>
+                  <copy>
+                    <from expression="concat(&quot;Error:&quot;,ora:getFaultAsString())"/>
+                    <to variable="Reply_upLoadFiles_UploadFiles_OutputVariable" part="parameters" query="/ns1:UploadFilesResponse/ns1:errMessage"/>
+                  </copy>
+                </assign>
+              </catchAll>
+            </faultHandlers>
+            <sequence name="Sequence_2" id="BpSeq2">
+              <assign name="getEnvParam" id="BpAss1">
+                <copy>
+                  <from variable="OnMessage_UploadFiles_InputVariable" part="parameters" query="/ns1:UploadFilesRequest/ns1:haspInterfaceId"/>
+                  <to variable="DB_get_hasp_Info_Db_get_file_info_InputVariable" part="Db_get_file_infoInput_msg" query="/ns9:Db_get_file_infoInput/ns9:HASP_INTERFACE_ID"/>
+                </copy>
+                <copy>
+                  <from expression="0"/>
+                  <to variable="Reply_upLoadFiles_UploadFiles_OutputVariable" part="parameters" query="/ns1:UploadFilesResponse/ns1:errCode"/>
+                </copy>
+                <copy>
+                  <from expression="ora:getFlowId()"/>
+                  <to variable="Reply_upLoadFiles_UploadFiles_OutputVariable" part="parameters" query="/ns1:UploadFilesResponse/ns1:bpelInstanceId"/>
+                </copy>
+                <copy>
+                  <from expression="'Files uploaded'"/>
+                  <to variable="Reply_upLoadFiles_UploadFiles_OutputVariable" part="parameters" query="/ns1:UploadFilesResponse/ns1:errMessage"/>
+                </copy>
+                <copy>
+                  <from variable="OnMessage_UploadFiles_InputVariable" part="parameters" query="/ns1:UploadFilesRequest/ns1:DBjndiName"/>
+                  <to variable="jndiDBVar"/>
+                </copy>
+                <copy>
+                  <from variable="OnMessage_UploadFiles_InputVariable" part="parameters" query="/ns1:UploadFilesRequest/ns1:FTPjndiName"/>
+                  <to variable="jndiFTPVar"/>
+                </copy>
+              </assign>
+              <invoke name="Invoke_DBgetFileInfo" partnerLink="DBgetFileInfo" portType="ns7:Db_get_file_info_ptt" operation="Db_get_file_info" inputVariable="DB_get_hasp_Info_Db_get_file_info_InputVariable" outputVariable="DB_get_hasp_Info_Db_get_file_info_OutputVariable" id="BpInv0">
+                <bpelx:inputProperty name="jca.jndi" variable="jndiDBVar"/>
+              </invoke>
+              <switch name="Switch_ReadExe" id="BpSwt0">
+                <case condition="bpws:getVariableData('DB_get_hasp_Info_Db_get_file_info_OutputVariable','Db_get_file_infoOutputCollection','/ns9:Db_get_file_infoOutputCollection/ns9:Db_get_file_infoOutput/ns9:is_basis_hasp')='Y'">
+                  <bpelx:annotation>
+                    <bpelx:general>
+                      <bpelx:property name="userLabel">
+                        No_File
+                      </bpelx:property>
+                    </bpelx:general>
+                  </bpelx:annotation>
+                  <empty name="Empty" id="BpEmp0"/>
+                </case>
+                <otherwise>
+                  <scope name="Read_exe_file" id="BpScp1">
+                    <faultHandlers id="BpFhs1">
+                      <catchAll id="BpCAl1">
+                        <sequence name="Sequence_6" id="BpSeq3">
+                          <assign name="Assign_err" id="BpAss2">
+                            <copy>
+                              <from expression="1"/>
+                              <to variable="Reply_upLoadFiles_UploadFiles_OutputVariable" part="parameters" query="/ns1:UploadFilesResponse/ns1:errCode"/>
+                            </copy>
+                            <copy>
+                              <from expression="&quot;Cant find EXE File&quot;"/>
+                              <to variable="Reply_upLoadFiles_UploadFiles_OutputVariable" part="parameters" query="/ns1:UploadFilesResponse/ns1:errMessage"/>
+                            </copy>
+                          </assign>
+                          <reply name="Reply_1" partnerLink="Client" portType="ns1:xxHaspFTPSoap" operation="UploadFiles" variable="Reply_upLoadFiles_UploadFiles_OutputVariable" id="BpRpl0"/>
+                          <terminate name="Terminate_1" id="BpTer0"/>
+                        </sequence>
+                      </catchAll>
+                    </faultHandlers>
+                    <sequence id="BpSeq4">
+                      <assign name="Assign_fileParam" id="BpAss3">
+                        <copy>
+                          <from variable="DB_get_hasp_Info_Db_get_file_info_OutputVariable" part="Db_get_file_infoOutputCollection" query="/ns9:Db_get_file_infoOutputCollection/ns9:Db_get_file_infoOutput/ns9:v2c_file_name"/>
+                          <to variable="fileName"/>
+                        </copy>
+                        <copy>
+                          <from variable="DB_get_hasp_Info_Db_get_file_info_OutputVariable" part="Db_get_file_infoOutputCollection" query="/ns9:Db_get_file_infoOutputCollection/ns9:Db_get_file_infoOutput/ns9:v2c_directory"/>
+                          <to variable="fileDirectory"/>
+                        </copy>
+                      </assign>
+                      <assign name="AssignTitle" id="BpAss4">
+                        <copy>
+                          <from expression="oraext:setFlowInstanceTitle(concat('Upload File=',bpws:getVariableData('fileName'),' HaspId : ',bpws:getVariableData('OnMessage_UploadFiles_InputVariable','parameters','/ns1:UploadFilesRequest/ns1:haspInterfaceId')))" bpelx:language="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0"/>
+                          <to variable="Title"/>
+                        </copy>
+                      </assign>
+                      <invoke name="Invoke_readFile" partnerLink="readFileHasp" portType="ns12:readFile_ptt" operation="readFile" inputVariable="Invoke_readFile_readFile_InputVariable" outputVariable="Invoke_readFile_readFile_OutputVariable" bpelx:invokeAsDetail="no" id="BpInv1">
+                        <bpelx:inputProperty name="jca.file.FileName" variable="fileName"/>
+                        <bpelx:inputProperty name="jca.file.Directory" variable="fileDirectory"/>
+                      </invoke>
+                    </sequence>
+                  </scope>
+                </otherwise>
+              </switch>
+              <scope name="Scope_ftp_files" id="BpScp2">
+                <variables>
+                  <variable name="Invoke_ftp_exe_Put_InputVariable" messageType="ns13:Put_msg"/>
+                  <variable name="Invoke_ftp_data_file_Put_InputVariable" messageType="ns13:Put_msg"/>
+                  <variable name="Invoke_ftpAscii_Put_InputVariable" messageType="ns16:V2C_msg"/>
+                  <variable name="Invoke_complete_file_Put_InputVariable" messageType="ns16:V2C_msg"/>
+                </variables>
+                <sequence name="Sequence_3" id="BpSeq5">
+                  <switch name="Switch_FtpExe" id="BpSwt1">
+                    <case condition="bpws:getVariableData('DB_get_hasp_Info_Db_get_file_info_OutputVariable','Db_get_file_infoOutputCollection','/ns9:Db_get_file_infoOutputCollection/ns9:Db_get_file_infoOutput/ns9:is_basis_hasp')='Y'">
+                      <bpelx:annotation>
+                        <bpelx:general>
+                          <bpelx:property name="userLabel">
+                            No_File
+                          </bpelx:property>
+                        </bpelx:general>
+                      </bpelx:annotation>
+                      <assign name="Assign_noFile" id="BpAss5">
+                        <copy>
+                          <from expression="'No_File'"/>
+                          <to variable="Invoke_ftpAscii_Put_InputVariable" part="V2C" query="/ns17:V2C/ns17:FILE_NAME"/>
+                        </copy>
+                      </assign>
+                    </case>
+                    <otherwise>
+                      <sequence name="Sequence_7" id="BpSeq6">
+                        <assign name="Assign_FTP_Param" id="BpAss6">
+                          <copy>
+                            <from variable="Invoke_readFile_readFile_OutputVariable" part="opaque" query="/ns14:opaqueElement"/>
+                            <to variable="Invoke_ftp_exe_Put_InputVariable" part="opaque" query="/ns14:opaqueElement"/>
+                          </copy>
+                          <copy>
+                            <from variable="DB_get_hasp_Info_Db_get_file_info_OutputVariable" part="Db_get_file_infoOutputCollection" query="/ns9:Db_get_file_infoOutputCollection/ns9:Db_get_file_infoOutput/ns9:v2c_file_name"/>
+                            <to variable="fileName"/>
+                          </copy>
+                        </assign>
+                        <invoke name="Invoke_ftp_exe" partnerLink="FTP" portType="ns13:Put_ptt" operation="Put" inputVariable="Invoke_ftp_exe_Put_InputVariable" bpelx:invokeAsDetail="no" id="BpInv2">
+                          <bpelx:inputProperty name="jca.ftp.FileName" variable="fileName"/>
+                          <bpelx:inputProperty name="jca.jndi" variable="jndiFTPVar"/>
+                        </invoke>
+                        <assign name="Assign_file_name" id="BpAss7">
+                          <copy>
+                            <from variable="DB_get_hasp_Info_Db_get_file_info_OutputVariable" part="Db_get_file_infoOutputCollection" query="/ns9:Db_get_file_infoOutputCollection/ns9:Db_get_file_infoOutput/ns9:v2c_file_name"/>
+                            <to variable="Invoke_ftpAscii_Put_InputVariable" part="V2C" query="/ns17:V2C/ns17:FILE_NAME"/>
+                          </copy>
+                        </assign>
+                      </sequence>
+                    </otherwise>
+                  </switch>
+                  <assign name="Assign_ftpAscii" id="BpAss8">
+                    <copy>
+                      <from expression="concat('v2c_',bpws:getVariableData('OnMessage_UploadFiles_InputVariable','parameters','/ns1:UploadFilesRequest/ns1:currDate'),'.xml')"/>
+                      <to variable="fileName"/>
+                    </copy>
+                    <copy>
+                      <from variable="DB_get_hasp_Info_Db_get_file_info_OutputVariable" part="Db_get_file_infoOutputCollection" query="/ns9:Db_get_file_infoOutputCollection/ns9:Db_get_file_infoOutput/ns9:group_number"/>
+                      <to variable="Invoke_ftpAscii_Put_InputVariable" part="V2C" query="/ns17:V2C/ns17:GROUP_NUMBER"/>
+                    </copy>
+                    <copy>
+                      <from variable="DB_get_hasp_Info_Db_get_file_info_OutputVariable" part="Db_get_file_infoOutputCollection" query="/ns9:Db_get_file_infoOutputCollection/ns9:Db_get_file_infoOutput/ns9:printer_sn"/>
+                      <to variable="Invoke_ftpAscii_Put_InputVariable" part="V2C" query="/ns17:V2C/ns17:PRINTER_SN"/>
+                    </copy>
+                    <copy>
+                      <from variable="DB_get_hasp_Info_Db_get_file_info_OutputVariable" part="Db_get_file_infoOutputCollection" query="/ns9:Db_get_file_infoOutputCollection/ns9:Db_get_file_infoOutput/ns9:key_pn"/>
+                      <to variable="Invoke_ftpAscii_Put_InputVariable" part="V2C" query="/ns17:V2C/ns17:TYPE"/>
+                    </copy>
+                    <copy>
+                      <from variable="DB_get_hasp_Info_Db_get_file_info_OutputVariable" part="Db_get_file_infoOutputCollection" query="/ns9:Db_get_file_infoOutputCollection/ns9:Db_get_file_infoOutput/ns9:hasp_sn"/>
+                      <to variable="Invoke_ftpAscii_Put_InputVariable" part="V2C" query="/ns17:V2C/ns17:DONGLE_SN"/>
+                    </copy>
+                    <copy>
+                      <from variable="DB_get_hasp_Info_Db_get_file_info_OutputVariable" part="Db_get_file_infoOutputCollection" query="/ns9:Db_get_file_infoOutputCollection/ns9:Db_get_file_infoOutput/ns9:source_type"/>
+                      <to variable="Invoke_ftpAscii_Put_InputVariable" part="V2C" query="/ns17:V2C/ns17:SOURCE_TYPE"/>
+                    </copy>
+                  </assign>
+                  <invoke name="Invoke_ftpDataAscii" partnerLink="FTP_ASCII" portType="ns16:Put_ptt" operation="Put" inputVariable="Invoke_ftpAscii_Put_InputVariable" bpelx:invokeAsDetail="no" id="BpInv3">
+                    <bpelx:inputProperty name="jca.ftp.FileName" variable="fileName"/>
+                    <bpelx:inputProperty name="jca.jndi" variable="jndiFTPVar"/>
+                  </invoke>
+                  <assign name="Assign_ftp_complete" id="BpAss9">
+                    <copy>
+                      <from expression="concat('complete_',bpws:getVariableData('OnMessage_UploadFiles_InputVariable','parameters','/ns1:UploadFilesRequest/ns1:currDate'),'.txt')"/>
+                      <to variable="fileName"/>
+                    </copy>
+                  </assign>
+                  <invoke name="Invoke_complete_file" partnerLink="FTP_ASCII" portType="ns16:Put_ptt" operation="Put" inputVariable="Invoke_complete_file_Put_InputVariable" bpelx:invokeAsDetail="no" id="BpInv4">
+                    <bpelx:inputProperty name="jca.ftp.FileName" variable="fileName"/>
+                    <bpelx:inputProperty name="jca.jndi" variable="jndiFTPVar"/>
+                  </invoke>
+                </sequence>
+              </scope>
+            </sequence>
+          </scope>
+          <reply name="Reply_upLoadFiles" partnerLink="Client" portType="ns1:xxHaspFTPSoap" operation="UploadFiles" variable="Reply_upLoadFiles_UploadFiles_OutputVariable" id="BpRpl1"/>
+        </sequence>
+      </onMessage>
+      <onMessage portType="ns1:xxHaspFTPSoap" operation="DownLoadFiles" partnerLink="Client" variable="OnMessage_DownLoadFiles_InputVariable" id="BpOMs1">
+        <sequence name="Sequence_4" id="BpSeq7">
+          <scope name="getLogFiles" id="BpScp3">
+            <variables>
+              <variable name="Invoke_getLogFile_SynchGet_InputVariable" messageType="ns20:Empty_msg"/>
+              <variable name="Invoke_getLogFile_SynchGet_OutputVariable" messageType="ns20:SynchGet_msg"/>
+            </variables>
+            <faultHandlers id="BpFhs2">
+              <catchAll id="BpCAl2">
+                <assign name="Assign_Err" id="BpAss10">
+                  <copy>
+                    <from expression="1"/>
+                    <to variable="Reply_DownLoadFiles_OutputVariable" part="parameters" query="/ns1:DownLoadFilesResponse/ns1:errCode"/>
+                  </copy>
+                  <copy>
+                    <from expression="concat(&quot;Error:&quot;,ora:getFaultAsString())"/>
+                    <to variable="Reply_DownLoadFiles_OutputVariable" part="parameters" query="/ns1:DownLoadFilesResponse/ns1:errMessage"/>
+                  </copy>
+                </assign>
+              </catchAll>
+            </faultHandlers>
+            <sequence name="Sequence_5" id="BpSeq8">
+              <assign name="Assign_params" id="BpAss11">
+                <copy>
+                  <from expression="ora:getFlowId()"/>
+                  <to variable="Reply_DownLoadFiles_OutputVariable" part="parameters" query="/ns1:DownLoadFilesResponse/ns1:bpelInstanceId"/>
+                </copy>
+                <copy>
+                  <from variable="OnMessage_DownLoadFiles_InputVariable" part="parameters" query="/ns1:DownLoadFilesRequest/ns1:FTPjndiName"/>
+                  <to variable="jndiFTPVar"/>
+                </copy>
+                <copy>
+                  <from variable="OnMessage_DownLoadFiles_InputVariable" part="parameters" query="/ns1:DownLoadFilesRequest/ns1:logFileName"/>
+                  <to variable="fileName"/>
+                </copy>
+              </assign>
+              <assign name="AssignTitle" id="BpAss12">
+                <copy>
+                  <from expression="oraext:setFlowInstanceTitle(concat('Download Log File=',bpws:getVariableData('fileName'),' HaspId : ',bpws:getVariableData('OnMessage_DownLoadFiles_InputVariable','parameters','/ns1:DownLoadFilesRequest/ns1:haspInterfaceId')))" bpelx:language="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0"/>
+                  <to variable="Title"/>
+                </copy>
+              </assign>
+              <invoke name="Invoke_getLogFile" partnerLink="FTP_GET" portType="ns20:SynchGet_ptt" operation="SynchGet" inputVariable="Invoke_getLogFile_SynchGet_InputVariable" outputVariable="Invoke_getLogFile_SynchGet_OutputVariable" bpelx:invokeAsDetail="no" id="BpInv5">
+                <bpelx:inputProperty name="jca.ftp.FileName" variable="fileName"/>
+                <bpelx:inputProperty name="jca.jndi" variable="jndiFTPVar"/>
+              </invoke>
+              <assign name="Assign_resultsVariable2" id="BpAss13">
+                <copy>
+                  <from expression="0"/>
+                  <to variable="Reply_DownLoadFiles_OutputVariable" part="parameters" query="/ns1:DownLoadFilesResponse/ns1:errCode"/>
+                </copy>
+                <copy>
+                  <from variable="Invoke_getLogFile_SynchGet_OutputVariable" part="body"/>
+                  <to variable="Reply_DownLoadFiles_OutputVariable" part="parameters" query="/ns1:DownLoadFilesResponse/ns1:errMessage"/>
+                </copy>
+              </assign>
+            </sequence>
+          </scope>
+          <reply name="Reply_downLoad" partnerLink="Client" portType="ns1:xxHaspFTPSoap" operation="DownLoadFiles" variable="Reply_DownLoadFiles_OutputVariable" id="BpRpl2"/>
+        </sequence>
+      </onMessage>
+    </pick>
+  </sequence>
+</process>

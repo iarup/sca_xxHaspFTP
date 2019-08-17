@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<wsdl:definitions name="FTP_GET" targetNamespace="http://xmlns.oracle.com/pcbpel/adapter/ftp/xxHaspFTP/xxHaspFTP/FTP_GET" xmlns:jca="http://xmlns.oracle.com/pcbpel/wsdl/jca/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://xmlns.oracle.com/pcbpel/adapter/ftp/xxHaspFTP/xxHaspFTP/FTP_GET" xmlns:imp1="http://xmlns.oracle.com/log" xmlns:plt="http://schemas.xmlsoap.org/ws/2003/05/partner-link/">
+   <plt:partnerLinkType name="SynchGet_plt">
+      <plt:role name="SynchGet_role">
+         <plt:portType name="tns:SynchGet_ptt"/>
+      </plt:role>
+   </plt:partnerLinkType>
+   <wsdl:types>
+      <schema targetNamespace="http://xmlns.oracle.com/pcbpel/adapter/ftp/xxHaspFTP/xxHaspFTP/FTP_GET" xmlns="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+         <import schemaLocation="xsd/log.xsd"/>
+         <element name="empty">
+            <complexType/>
+         </element>
+      </schema>
+   </wsdl:types>
+   <wsdl:message name="Empty_msg">
+      <wsdl:part name="Empty" element="tns:empty"/>
+   </wsdl:message>
+   <wsdl:message name="SynchGet_msg">
+      <wsdl:part name="body" element="ROOT"/>
+   </wsdl:message>
+   <wsdl:portType name="SynchGet_ptt">
+      <wsdl:operation name="SynchGet">
+         <wsdl:input message="tns:Empty_msg"/>
+         <wsdl:output message="tns:SynchGet_msg"/>
+      </wsdl:operation>
+   </wsdl:portType>
+</wsdl:definitions>
