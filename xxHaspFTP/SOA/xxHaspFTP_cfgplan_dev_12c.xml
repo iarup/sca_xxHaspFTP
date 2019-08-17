@@ -68,7 +68,7 @@
       </reference>
       <reference name="FTP_GET">
          <property name="FTP_LOGS">
-            <replace>/Test/Logs</replace>
+            <replace>/Test/Logs/testing</replace>
          </property>
          <binding type="jca"/>
       </reference>
